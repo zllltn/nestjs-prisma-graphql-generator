@@ -1,4 +1,4 @@
 {
-  "name": "@izltn/nestjs-prisma-graphql-generator",
+  "name": "@zllltn/nestjs-prisma-graphql-generator",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json"
 }
