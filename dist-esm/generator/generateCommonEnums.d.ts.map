@@ -1,0 +1,1 @@
+{"version":3,"file":"generateCommonEnums.d.ts","sourceRoot":"","sources":["../../src/generator/generateCommonEnums.ts"],"names":[],"mappings":"AACA,OAAO,EAAqC,OAAO,EAAE,MAAM,UAAU,CAAA;AACrE,OAAO,EAAE,YAAY,EAAE,MAAM,qBAAqB,CAAA;AAElD,eAAO,MAAM,mBAAmB,GAAI,cAAc,YAAY,EAAE,SAAS,OAAO,EAAE,WAAW,MAAM,SAmClG,CAAA"}

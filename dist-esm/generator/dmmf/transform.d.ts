@@ -1,0 +1,12 @@
+import * as PrismaDMMF from '@prisma/dmmf';
+import { GeneratorOptions } from '../options';
+import { DmmfDocument } from './DmmfDocument';
+import { DMMF } from './types';
+export declare function transformSchema(datamodel: PrismaDMMF.Schema, dmmfDocument: DmmfDocument): Omit<DMMF.Schema, 'enums'>;
+export declare function transformMappings(mapping: PrismaDMMF.ModelMapping[], dmmfDocument: DmmfDocument, options: GeneratorOptions): DMMF.ModelMapping[];
+export declare function transformBareModel(model: PrismaDMMF.Model): DMMF.Model;
+export declare function transformModelWithFields(dmmfDocument: DmmfDocument): (model: PrismaDMMF.Model) => DMMF.Model;
+export declare function getMappedOutputTypeName(dmmfDocument: DmmfDocument, outputTypeName: string): string;
+export declare function transformEnums(dmmfDocument: DmmfDocument): (enumDef: PrismaDMMF.DatamodelEnum | PrismaDMMF.SchemaEnum) => DMMF.Enum;
+export declare function generateRelationModel(dmmfDocument: DmmfDocument): (model: DMMF.Model) => DMMF.RelationModel;
+//# sourceMappingURL=transform.d.ts.map

@@ -1,0 +1,74 @@
+import path from 'path';
+import { camelCase, getArguments } from './helpers';
+export const generateOutput = (dmmfDocument, project, outputDir, model) => {
+    const modelName = camelCase(model.name);
+    const rootTypes = dmmfDocument.schema.outputTypes.filter((type) => ['Query', 'Mutation'].includes(type.name));
+    const outputTypesToGenerate = dmmfDocument.schema.outputTypes.filter((type) => type.modelName === model.name && !rootTypes.includes(type));
+    outputTypesToGenerate.forEach((type) => {
+        const filePath = path.resolve(outputDir, modelName, 'outputs', `${type.typeName}.output.ts`);
+        const sourceFile = project.createSourceFile(filePath, undefined, {
+            overwrite: true,
+        });
+        sourceFile.addImportDeclaration({ moduleSpecifier: '@nestjs/graphql', namespaceImport: 'NestJsGraphQL' });
+        const args = [];
+        const outputs = [];
+        const enums = [];
+        outputTypesToGenerate.forEach((type) => {
+            for (const item of [...new Set(type.fields.filter((it) => it.argsTypeName).map((it) => it.argsTypeName))].sort()) {
+                if (!args.includes(item))
+                    args.push(item);
+            }
+            for (const item of [
+                ...new Set(type.fields.filter((field) => field.outputType.location === 'outputObjectTypes').map((field) => field.outputType.type)),
+            ].sort()) {
+                if (!outputs.includes(item))
+                    outputs.push(item);
+            }
+            for (const item of [
+                ...new Set(type.fields
+                    .map((field) => field.outputType)
+                    .filter((fieldType) => fieldType.location === 'enumTypes' && fieldType.namespace === 'model')
+                    .map((fieldType) => fieldType.type)),
+            ].sort()) {
+                if (!enums.includes(item))
+                    enums.push(item);
+            }
+        });
+        if (args.length)
+            sourceFile.addImportDeclaration({ moduleSpecifier: path.posix.join('..', `${modelName}.args`), namedImports: args });
+        if (outputs.length) {
+            for (const item of [...new Set(outputs)].sort()) {
+                sourceFile.addImportDeclaration({ moduleSpecifier: `./${item}.output`, namedImports: [item] });
+            }
+        }
+        if (enums.length) {
+            for (const item of [...new Set(enums)].sort()) {
+                sourceFile.addImportDeclaration({ moduleSpecifier: path.posix.join(`../../enums/${item}.enum`), namedImports: [item] });
+            }
+        }
+        sourceFile.addClass({
+            name: type.typeName,
+            isExported: true,
+            decorators: [
+                {
+                    name: 'NestJsGraphQL.ObjectType',
+                    arguments: [`'${type.typeName}'`, ...getArguments(undefined, undefined, undefined, true, dmmfDocument.options.simpleResolvers)],
+                },
+            ],
+            properties: type.fields.map((field) => ({
+                name: field.name,
+                type: field.fieldTSType,
+                hasExclamationToken: true,
+                hasQuestionToken: false,
+                trailingTrivia: '\r\n',
+                decorators: [
+                    {
+                        name: 'NestJsGraphQL.Field',
+                        arguments: getArguments(field.typeGraphQLType, undefined, !field.isRequired),
+                    },
+                ],
+            })),
+        });
+    });
+};
+//# sourceMappingURL=generateOutput.js.map

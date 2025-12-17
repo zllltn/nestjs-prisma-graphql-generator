@@ -1,0 +1,87 @@
+{
+  "name": "@izltn/nestjs-prisma-graphql-generator",
+  "version": "0.0.1",
+  "description": "Generate Prisma GraphQL types, resolvers and even more.",
+  "main": "dist-esm/index.js",
+  "types": "dist-esm/index.d.ts",
+  "license": "MIT",
+  "private": true,
+  "bin": {
+    "nestjs-prisma-graphql-crud-gen": "./dist-esm/index.js"
+  },
+  "engines": {
+    "node": ">=20.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "start": "node dist-esm/bin.js",
+    "dev": "npx tsc -w",
+    "clean": "rm -rf dist-cjs dist-esm node_modules/.cache",
+    "build": "yarn clean && npx tsc --build tsconfig.cjs.json tsconfig.esm.json",
+    "prepack": "yarn build",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.1.0",
+    "@prisma/dmmf": "7.1.0",
+    "@prisma/generator-helper": "^7.1.0",
+    "@prisma/internals": "^7.1.0",
+    "pluralize": "^8.0.0",
+    "ts-morph": "^27.0.2"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.19.25",
+    "@types/pluralize": "^0.0.33",
+    "@typescript-eslint/eslint-plugin": "6.9.1",
+    "@typescript-eslint/parser": "6.9.1",
+    "eslint": "8.52.0",
+    "eslint-config-prettier": "9.0.0",
+    "eslint-plugin-prettier": "5.0.1",
+    "jest": "^30.2.0",
+    "prettier": "^3.7.4",
+    "prisma": "^7.1.0",
+    "semantic-release": "^25.0.2",
+    "ts-jest": "29.4.6",
+    "typescript": "^5.9.2"
+  },
+  "files": [
+    "dist-cjs",
+    "dist-esm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/izltn/nestjs-prisma-graphql-generator.git"
+  },
+  "author": "zltn<zlatan.nikolich@gmail.com>",
+  "keywords": [
+    "prisma",
+    "prisma2",
+    "graphql",
+    "generator"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist-cjs/index.js",
+      "import": "./dist-esm/index.js"
+    },
+    "./*": {
+      "default": "./*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "index.d.ts": [
+        "./dist-esm/entrypoints/main.d.ts"
+      ],
+      "*": [
+        "./*"
+      ]
+    }
+  }
+}

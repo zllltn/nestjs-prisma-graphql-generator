@@ -1,0 +1,25 @@
+export type EmitBlockKind = 'enums' | 'models' | 'crudResolvers' | 'relationResolvers' | 'inputs' | 'outputs';
+export declare const ALL_EMIT_BLOCK_KINDS: EmitBlockKind[];
+export declare const BLOCKS_DEPENDENCIES_MAP: Record<EmitBlockKind, EmitBlockKind[]>;
+export declare function getBlocksToEmit(emitOnly: EmitBlockKind[] | undefined): EmitBlockKind[];
+export interface ExternalGeneratorOptions {
+    emitDMMF?: boolean;
+    emitTranspiledCode?: boolean;
+    simpleResolvers?: boolean;
+    useOriginalMapping?: boolean;
+    useUncheckedScalarInputs?: boolean;
+    emitIdAsIDType?: boolean;
+    emitOnly?: EmitBlockKind[];
+    customPrismaImportPath?: string | string[];
+    contextPrismaKey?: string;
+}
+export interface InternalGeneratorOptions {
+    outputDirPath: string;
+    relativePrismaOutputPath: string;
+    absolutePrismaOutputPath?: string;
+}
+export interface GeneratorOptions extends Omit<ExternalGeneratorOptions, 'emitOnly' | 'contextPrismaKey'>, InternalGeneratorOptions {
+    blocksToEmit: EmitBlockKind[];
+    contextPrismaKey: string | string[];
+}
+//# sourceMappingURL=options.d.ts.map
